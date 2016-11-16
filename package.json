@@ -35,5 +35,13 @@
   "dependencies": {
     "async": "^2.1.2",
     "lodash": "^4.16.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhhb/node-rules.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhhb/node-rules.git/issues"
+  },
+  "homepage": "https://github.com/zhhb/node-rules.git#readme"
 }
