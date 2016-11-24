@@ -20,17 +20,22 @@ module.exports = function (config) {
 
         preprocessors: {
             // add webpack as preprocessor
-            'test/*.spec.js': ['webpack', 'sourcemap'],
-            'test/**/*.spec.js': ['webpack', 'sourcemap']
+            'test/*.spec.js': ['webpack', 'sourcemap','coverage'],
+            'test/**/*.spec.js': ['webpack', 'sourcemap','coverage']
         },
-        reporters: ['mocha'],
+        reporters: ['mocha','coverage'],
+        coverageReporter: {
+            type: 'html',
+            dir: 'coverage/',
+        },
         plugins: [
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-mocha',
             'karma-chai',
             'karma-mocha-reporter',
-            'karma-phantomjs-launcher'
+            'karma-phantomjs-launcher',
+            'karma-coverage'
         ],
         port: 9876,
         colors: true,
