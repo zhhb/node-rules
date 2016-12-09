@@ -1,8 +1,11 @@
 import * as _ from 'lodash';
 
 export class RuleEngine {
+    ignoreFactChanges;
+    activeRules;
+    rules;
 
-    constructor(rules, options) {
+    constructor(rules?, options?) {
         this.init();
         if (typeof rules !== 'undefined') {
             this.register(rules);
@@ -46,7 +49,7 @@ export class RuleEngine {
         });
     }
 
-    findRules(filter) {
+    findRules(filter?) {
         if (typeof filter === 'undefined') {
             return this.rules;
         } else {
@@ -212,26 +215,3 @@ function Loop(flow, x) {
         });
     }
 }
-
-
-// var rules = [{
-//     'name': 'rule1',
-//     'condition': function (R) {
-//         R.when(this.value1 > 5);
-//     },
-//     'consequence': function (R) {
-//         this.result = false;
-//         this.errors = this.errors || [];
-//         this.errors.push('must be less than 5');
-//         R.next();
-//     }
-// }];
-
-// var fact = {
-//     'value1': 6
-// };
-
-// var RX = new RuleEngine(rules, { ignoreFactChanges: true });
-// RX.execute(fact, function (session) {
-//     console.log('session:', session);
-// });

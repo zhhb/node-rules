@@ -1,4 +1,4 @@
-var RuleEngine = require('../index');
+var RuleEngine = require('../dist').RuleEngine;
 /* Here we can see a rule which upon matching its condition,
 does some processing and passes it to other rules for processing */
 var rules = [{

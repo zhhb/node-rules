@@ -1,4 +1,4 @@
-import { RuleEngine } from '../lib/node-rules';
+import { RuleEngine } from './index';
 import { expect, assert } from 'chai';
 
 describe('Rules', function () {
@@ -275,7 +275,7 @@ describe('Rules', function () {
                     'y': false
                 },
                 function (session) {
-                    expect(session.matchPath).to.eql([rules[0].name, rules[2].id, lastMatch]);
+                    expect(session.matchPath).to.eql([rules[0]['name'], rules[2]['id'], lastMatch]);
                     done();
                 }
             );

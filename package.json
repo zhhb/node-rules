@@ -1,44 +1,29 @@
 {
   "name": "node-rule-engine",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "",
-  "main": "./dist/main.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test:node": "nyc mocha-webpack --webpack-config ./config/webpack.test.js \"test/**/*.spec.js\"",
-    "test:karma": "karma start",
-    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
+    "pretest": "rimraf dist && tsc",
+    "test": "mocha ./dist/**/*.spec.js"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "babel": "^6.5.2",
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.0",
-    "babel-istanbul-loader": "^0.1.0",
-    "babel-loader": "^6.2.6",
-    "babel-plugin-import": "^1.0.1",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-1": "^6.16.0",
-    "chai": "^3.5.0",
-    "istanbul-instrumenter-loader": "^1.0.0",
-    "karma": "^1.3.0",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^1.1.1",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^1.8.0",
-    "mocha": "^3.1.2",
-    "mocha-webpack": "^0.7.0",
-    "nyc": "^9.0.1",
-    "phantomjs-prebuilt": "^2.1.13",
-    "webpack": "^1.13.3",
-    "webpack-merge": "^0.15.0"
-  },
   "dependencies": {
     "async": "^2.1.2",
     "lodash": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/async": "^2.0.34",
+    "@types/chai": "^3.4.34",
+    "@types/lodash": "^4.14.43",
+    "@types/mocha": "^2.2.33",
+    "@types/node": "0.0.2",
+    "chai": "^3.5.0",
+    "colors": "^1.1.2",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "typescript": "^2.1.4"
   },
   "repository": {
     "type": "git",

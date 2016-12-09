@@ -1,4 +1,4 @@
-var RuleEngine = require('../index');
+var RuleEngine = require('../dist').RuleEngine;
 /* Sample Rule to block a transaction if its below 500 */
 var rule = {
     "condition": function(R) {

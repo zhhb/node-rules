@@ -1,4 +1,4 @@
-var RuleEngine = require('../index');
+var RuleEngine = require('../dist').RuleEngine;
 /* Set of Rules to be applied */
 var rules = [{
     "priority": 4,
