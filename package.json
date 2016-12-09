@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "test": "rimraf coverage && nyc --require ts-node/register ./node_modules/.bin/_mocha 'src/**/*.spec.ts' --full-trace --bail"
+    "test": "rimraf coverage && nyc --require ts-node/register ./node_modules/.bin/_mocha 'src/**/*.spec.ts' --full-trace --bail",
+    "posttest": "open ./coverage/unit/lcov-report/index.html"
   },
   "author": "",
   "license": "ISC",
@@ -16,11 +17,13 @@
   "devDependencies": {
     "@types/async": "^2.0.34",
     "@types/chai": "^3.4.34",
+    "@types/debug": "0.0.29",
     "@types/lodash": "^4.14.43",
     "@types/mocha": "^2.2.33",
     "@types/node": "0.0.2",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
+    "debug": "^2.3.3",
     "mocha": "^3.2.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.5.4",

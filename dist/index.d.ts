@@ -2,6 +2,7 @@ export declare class RuleEngine {
     ignoreFactChanges: any;
     activeRules: any;
     rules: any;
+    private static logger;
     constructor(rules?: any, options?: any);
     init(): void;
     register(rules: any): void;

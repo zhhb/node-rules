@@ -1,5 +1,6 @@
 "use strict";
 var _ = require("lodash");
+var debug = require("debug");
 var RuleEngine = (function () {
     function RuleEngine(rules, options) {
         this.init();
@@ -109,6 +110,7 @@ var RuleEngine = (function () {
     };
     return RuleEngine;
 }());
+RuleEngine.logger = debug('RE:RuleEngine');
 exports.RuleEngine = RuleEngine;
 var Flow = (function () {
     function Flow() {
@@ -171,12 +173,14 @@ var Flow = (function () {
     Flow.prototype.next = function () {
         var _this = this;
         if (!this.ignoreFactChanges && !_.isEqual(this.lastSession, this.session)) {
+            Flow.logger('branch 1');
             this.lastSession = _.clone(this.session);
             process.nextTick(function () {
                 _this.restart();
             });
         }
         else {
+            Flow.logger('branch 2');
             process.nextTick(function () {
                 return Loop(_this, _this._index + 1);
             });
@@ -184,8 +188,11 @@ var Flow = (function () {
     };
     return Flow;
 }());
+Flow.logger = debug('RE:Flow');
+var logger = debug('RE:Loop');
 function Loop(flow, x) {
     if (x < flow.length && flow.complete === false) {
+        logger('branch 1');
         flow.rule = x;
         var _rule = flow.rule;
         if (_rule && _.isFunction(_rule.condition)) {
@@ -193,6 +200,7 @@ function Loop(flow, x) {
         }
     }
     else {
+        logger('branch 2');
         process.nextTick(function () {
             flow.session.matchPath = flow.matchPath;
             return flow.callback(flow.session);

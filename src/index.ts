@@ -1,9 +1,13 @@
 import * as _ from 'lodash';
+import * as debug from 'debug';
+
 
 export class RuleEngine {
     ignoreFactChanges;
     activeRules;
     rules;
+
+    private static logger = debug('RE:RuleEngine')
 
     constructor(rules?, options?) {
         this.init();
@@ -134,6 +138,8 @@ class Flow {
     ignoreFactChanges;
     callback;
 
+    private static logger = debug('RE:Flow')
+
     constructor(...args) {
         this._rules = args[0] || [];
         this.matchPath = [];
@@ -189,11 +195,13 @@ class Flow {
 
     next() {
         if (!this.ignoreFactChanges && !_.isEqual(this.lastSession, this.session)) {
+            Flow.logger('branch 1');
             this.lastSession = _.clone(this.session);
             process.nextTick(() => {
                 this.restart();
             });
         } else {
+            Flow.logger('branch 2');
             process.nextTick(() => {
                 return Loop(this, this._index + 1);
             });
@@ -201,14 +209,17 @@ class Flow {
     }
 }
 
+const logger = debug('RE:Loop')
 function Loop(flow, x) {
     if (x < flow.length && flow.complete === false) {
+        logger('branch 1');
         flow.rule = x;
         var _rule = flow.rule;
         if (_rule && _.isFunction(_rule.condition)) {
             _rule.condition.call(flow.session, flow);
         }
     } else {
+        logger('branch 2');
         process.nextTick(() => {
             flow.session.matchPath = flow.matchPath;
             return flow.callback(flow.session);
