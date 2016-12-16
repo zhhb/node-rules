@@ -7,10 +7,10 @@ var rules = [
         "priority": 3,
         "on": true,
         "condition": function(R) {
-            R.when(this.transactionTotal < 500);
+            R.when(this.transactionTotal > 500);
         },
         "consequence": function(R) {
-            console.log("Rule 1 matched - blocks transactions below value 500. Rejecting payment.");
+            console.log("Rule 1 matched - 支付金额大于 500. 解决免密支付.");
             this.result = false;
             R.stop();
         }
@@ -24,7 +24,7 @@ var rules = [
             R.when(this.userCredibility && this.userCredibility > 5);
         },
         "consequence": function(R) {
-            console.log("Rule 2 matched - user credibility is more, then avoid further check. Accepting payment.");
+            console.log("Rule 2 matched - 用户信用非常好. 直接打白条支付.");
             this.result = true;
             R.stop();
         }
@@ -35,10 +35,10 @@ var rules = [
         "priority": 4,
         "on": true,
         "condition": function(R) {
-            R.when(this.cardType == "Credit Card" && this.cardIssuer == "American Express" && this.transactionTotal > 1000);
+            R.when(this.cardType == "Credit Card" && this.cardIssuer == "招商银行" && this.transactionTotal > 10000);
         },
         "consequence": function(R) {
-            console.log("Rule 3 matched - filter American Express payment above 10000. Rejecting payment.");
+            console.log("Rule 3 matched - 招商银行 信用卡额度 小于 10000，无法透支大于10000的支付额. 拒绝支付.");
             this.result = false;
             R.stop();
         }
@@ -52,7 +52,7 @@ var rules = [
             R.when(this.cardType == "Cash Card");
         },
         "consequence": function(R) {
-            console.log("Rule 4 matched - reject the payment if cash card. Rejecting payment.");
+            console.log("Rule 4 matched - 当前卡为借记卡，无法透支支付. 拒绝支付.");
             this.result = false;
             R.stop();
         }
@@ -66,7 +66,7 @@ var rules = [
             R.when(this.customerType && this.transactionTotal > 10000 && this.customerType == "guest");
         },
         "consequence": function(R) {
-            console.log("Rule 5 matched - reject if above 10000 and customer type is guest. Rejecting payment.");
+            console.log("Rule 5 matched - 普通宾客付金额超过10000. 拒绝支付.");
             this.result = false;
             R.stop();
         }
@@ -92,10 +92,10 @@ var rules = [
         "priority": 5,
         "on": true,
         "condition": function(R) {
-            R.when(this.appCode && this.appCode === "MOBI4");
+            R.when(this.appCode && this.appCode === "alipay");
         },
         "consequence": function(R) {
-            console.log("Rule 7 matched - block payment for Mobile. Reject Payment.");
+            console.log("Rule 7 matched - 拒绝支付宝支付.");
             this.result = false;
             R.stop();
         }
@@ -109,7 +109,7 @@ var rules = [
             R.when(this.eventRiskFactor && this.eventRiskFactor < 5);
         },
         "consequence": function(R) {
-            console.log("Rule 8 matched - the event is not critical, so accept");
+            console.log("Rule 8 matched - 在低风险名单中，风险值很小, 直接通过放行");
             this.result = true;
             R.stop();
         }
@@ -125,7 +125,7 @@ var rules = [
             R.when(this.userIP && this.userIP.match(allowedRegexp));
         },
         "consequence": function(R) {
-            console.log("Rule 9 matched - ip falls in the given list, then block. Rejecting payment.");
+            console.log("Rule 9 matched - 命中IP黑名单, 交易终止.");
             this.result = false;
             R.stop();
         }
@@ -140,7 +140,7 @@ var rules = [
             R.when(this && blacklist.indexOf(this.name) > -1);
         },
         "consequence": function(R) {
-            console.log("Rule 10 matched - the user is malicious, then block. Rejecting payment.");
+            console.log("Rule 10 matched - 命中用户黑名单，终止交易.");
             this.result = false;
             R.stop();
         }
@@ -243,9 +243,9 @@ var user8 = {
     "cardIssuer": "VISA",
 };
 var R = new RuleEngine(rules);
-console.log("----------".blue);
-console.log("start execution of rules".blue);
-console.log("----------".blue);
+console.log("----------".white);
+console.log("start execution of rules".white);
+console.log("----------".white);
 R.execute(user7, function(result) {
     if (result.result) console.log("Completed", "User7 Accepted".green);
     else console.log("Completed", "User7 Rejected".red);

@@ -23,7 +23,7 @@ var rules = [{
     }
 }];
 /* Creating Rule Engine instance and registering rule */
-var R = new RuleEngine(rules,{ignoreFactChanges:true});
+var R = new RuleEngine(rules);
 
 var fact = {
     "name": "user4",
@@ -35,6 +35,7 @@ var fact = {
     "score_danger":200
 };
 R.execute(fact, function(data) {
+    console.log(data);
     if (data.score>data.score_danger) {
         console.log("非法交易: "+ data.reason.join(','));
     } else {

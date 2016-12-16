@@ -172,19 +172,10 @@ var Flow = (function () {
     };
     Flow.prototype.next = function () {
         var _this = this;
-        if (!this.ignoreFactChanges && !_.isEqual(this.lastSession, this.session)) {
-            Flow.logger('branch 1');
-            this.lastSession = _.clone(this.session);
-            process.nextTick(function () {
-                _this.restart();
-            });
-        }
-        else {
-            Flow.logger('branch 2');
-            process.nextTick(function () {
-                return Loop(_this, _this._index + 1);
-            });
-        }
+        Flow.logger('branch 2');
+        process.nextTick(function () {
+            return Loop(_this, _this._index + 1);
+        });
     };
     return Flow;
 }());
