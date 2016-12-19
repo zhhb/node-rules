@@ -193,24 +193,28 @@ class Flow {
     return Loop(this, 0);
   }
 
-  next() {
-    // if (!this.ignoreFactChanges && !_.isEqual(this.lastSession, this.session)) {
-    //     Flow.logger('branch 1');
-    //     this.lastSession = _.clone(this.session);
-    //     process.nextTick(() => {
-    //         this.restart();
-    //     });
-    // } else {
-    Flow.logger('branch 2');
-    process.nextTick(() => {
-      return Loop(this, this._index + 1);
-    });
-    //}
+  next(name?) {
+    Flow.logger('go to next rule case');
+    if (name) {
+      process.nextTick(() => {
+        return Loop(this, this._index + 1, name);
+      });
+    }
+    else {
+      process.nextTick(() => {
+        return Loop(this, this._index + 1);
+      });
+    }
   }
 }
 
 const logger = debug('RE:Loop')
-function Loop(flow, x) {
+function Loop(flow, x, name?) {
+  if (name) {
+    flow._rules.filter(function () {
+
+    });
+  }
   if (x < flow.length && flow.complete === false) {
     logger('branch 1');
     flow.rule = x;
