@@ -396,29 +396,5 @@ describe('Rules', function () {
             chai_1.expect(rules).to.eql(RX.rules);
         });
     });
-    describe('ignoreFactChanges', function () {
-        var rules = [{
-                'name': 'rule1',
-                'condition': function (R) {
-                    R.when(this.value1 > 5);
-                },
-                'consequence': function (R) {
-                    this.result = false;
-                    this.errors = this.errors || [];
-                    this.errors.push('must be less than 5');
-                    R.next();
-                }
-            }];
-        var fact = {
-            'value1': 6
-        };
-        it('doesn\'t return when a fact changes if ignoreFactChanges is true', function (done) {
-            var RX = new index_1.RuleEngine(rules, { ignoreFactChanges: true });
-            RX.execute(fact, function (session) {
-                chai_1.expect(session.errors).to.have.length(1);
-                done();
-            });
-        });
-    });
 });
 //# sourceMappingURL=index.spec.js.map

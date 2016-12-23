@@ -2,13 +2,10 @@
 var _ = require("lodash");
 var debug = require("debug");
 var RuleEngine = (function () {
-    function RuleEngine(rules, options) {
+    function RuleEngine(rules) {
         this.init();
         if (typeof rules !== 'undefined') {
             this.register(rules);
-        }
-        if (options) {
-            this.ignoreFactChanges = options.ignoreFactChanges;
         }
     }
     RuleEngine.prototype.init = function () {
@@ -103,9 +100,8 @@ var RuleEngine = (function () {
         this.register(_rules);
     };
     RuleEngine.prototype.execute = function (fact, cb) {
-        var ignoreFactChanges = this.ignoreFactChanges;
         var flow = new Flow(this.activeRules, {
-            ignoreFactChanges: ignoreFactChanges, fact: fact
+            fact: fact
         }, cb);
     };
     return RuleEngine;
@@ -122,7 +118,6 @@ var Flow = (function () {
         this.matchPath = [];
         this.complete = false;
         var conf = args[1];
-        this.ignoreFactChanges = conf.ignoreFactChanges;
         this.session = _.clone(conf.fact);
         this.lastSession = _.clone(conf.fact);
         this.callback = args[2];
@@ -172,7 +167,7 @@ var Flow = (function () {
     };
     Flow.prototype.next = function () {
         var _this = this;
-        Flow.logger('branch 2');
+        Flow.logger('go to next rule case');
         process.nextTick(function () {
             return Loop(_this, _this._index + 1);
         });
@@ -181,7 +176,7 @@ var Flow = (function () {
 }());
 Flow.logger = debug('RE:Flow');
 var logger = debug('RE:Loop');
-function Loop(flow, x) {
+function Loop(flow, x, name) {
     if (x < flow.length && flow.complete === false) {
         logger('branch 1');
         flow.rule = x;
