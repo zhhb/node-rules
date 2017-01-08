@@ -100,7 +100,7 @@ var RuleEngine = (function () {
         this.register(_rules);
     };
     RuleEngine.prototype.execute = function (fact, cb) {
-        var flow = new Flow(this.activeRules, {
+        var executor = new ChainedExector(this.activeRules, {
             fact: fact
         }, cb);
     };
@@ -108,8 +108,8 @@ var RuleEngine = (function () {
 }());
 RuleEngine.logger = debug('RE:RuleEngine');
 exports.RuleEngine = RuleEngine;
-var Flow = (function () {
-    function Flow() {
+var ChainedExector = (function () {
+    function ChainedExector() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -123,14 +123,14 @@ var Flow = (function () {
         this.callback = args[2];
         Loop(this, 0);
     }
-    Object.defineProperty(Flow.prototype, "length", {
+    Object.defineProperty(ChainedExector.prototype, "length", {
         get: function () {
             return this._rules.length;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Flow.prototype, "rule", {
+    Object.defineProperty(ChainedExector.prototype, "rule", {
         get: function () {
             return this._rule;
         },
@@ -141,7 +141,7 @@ var Flow = (function () {
         enumerable: true,
         configurable: true
     });
-    Flow.prototype.when = function (outcome) {
+    ChainedExector.prototype.when = function (outcome) {
         var _this = this;
         if (outcome) {
             var rule = this._rule;
@@ -158,38 +158,38 @@ var Flow = (function () {
             });
         }
     };
-    Flow.prototype.restart = function () {
+    ChainedExector.prototype.restart = function () {
         return Loop(this, 0);
     };
-    Flow.prototype.stop = function () {
+    ChainedExector.prototype.stop = function () {
         this.complete = true;
         return Loop(this, 0);
     };
-    Flow.prototype.next = function () {
+    ChainedExector.prototype.next = function () {
         var _this = this;
-        Flow.logger('go to next rule case');
+        ChainedExector.logger('go to next rule case');
         process.nextTick(function () {
             return Loop(_this, _this._index + 1);
         });
     };
-    return Flow;
+    return ChainedExector;
 }());
-Flow.logger = debug('RE:Flow');
+ChainedExector.logger = debug('RE:ChainedExector');
 var logger = debug('RE:Loop');
-function Loop(flow, x, name) {
-    if (x < flow.length && flow.complete === false) {
+function Loop(executor, x, name) {
+    if (x < executor.length && executor.complete === false) {
         logger('branch 1');
-        flow.rule = x;
-        var _rule = flow.rule;
+        executor.rule = x;
+        var _rule = executor.rule;
         if (_rule && _.isFunction(_rule.condition)) {
-            _rule.condition.call(flow.session, flow);
+            _rule.condition.call(executor.session, executor);
         }
     }
     else {
         logger('branch 2');
         process.nextTick(function () {
-            flow.session.matchPath = flow.matchPath;
-            return flow.callback(flow.session);
+            executor.session.matchPath = executor.matchPath;
+            return executor.callback(executor.session);
         });
     }
 }
